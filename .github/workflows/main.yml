@@ -51,26 +51,12 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/hellocicd:latest
   
   run_deploy:
-    name: CD - Deploy no Railway 
+    name: CD - Deploy no Render
     runs-on: ubuntu-22.04
     needs: run_build
     steps:
-      - run: echo "Iniciando o Deploy da Aplicação"
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Use Node 18
-        uses: actions/setup-node@v3.5.1
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          node-version: 18.x
-
-      - name: Install Packages
-        run: yarn install
-        
-      - name: Install Railway
-        run: npm i -g @railway/cli
-
-      - name: Deploy
-        run: railway up
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
